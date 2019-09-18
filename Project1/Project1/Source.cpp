@@ -1,9 +1,13 @@
 #include <conio.h>
 #include <iostream>
+#include "Juego.h"
 
 using namespace System;
 using namespace std;
+using namespace Project1;
 
-int main() {
-	cout << "hola mundo esto es sin WIlfredo";
+void main(){
+	Application::EnableVisualStyles();
+	Application::Run(gcnew Juego());
+
 }
