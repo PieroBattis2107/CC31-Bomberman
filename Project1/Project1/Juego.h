@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Controladora.h"
 namespace Project1 {
 
 	using namespace System;
@@ -15,6 +15,10 @@ namespace Project1 {
 	public ref class Juego : public System::Windows::Forms::Form
 	{
 	public:
+		CControladora *oControladora = new CControladora();
+		Bitmap^ bmpSolido = gcnew Bitmap("Imagenes\\bmpSolido.png");
+		Bitmap^ bmpDestruible = gcnew Bitmap("Imagenes\\bmpDestruible.png");
+		Bitmap^ bmpSuelo = gcnew Bitmap("Imagenes\\bmpSuelo.png");
 		Juego(void)
 		{
 			InitializeComponent();
@@ -34,12 +38,15 @@ namespace Project1 {
 				delete components;
 			}
 		}
+	private: System::Windows::Forms::Timer^  timer1;
+	protected:
+	private: System::ComponentModel::IContainer^  components;
 
 	private:
 		/// <summary>
 		/// Variable del diseñador necesaria.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -48,12 +55,38 @@ namespace Project1 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"Juego";
-			this->Padding = System::Windows::Forms::Padding(0);
+			this->components = (gcnew System::ComponentModel::Container());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->SuspendLayout();
+			// 
+			// timer1
+			// 
+			this->timer1->Enabled = true;
+			this->timer1->Tick += gcnew System::EventHandler(this, &Juego::timer1_Tick);
+			// 
+			// Juego
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->ClientSize = System::Drawing::Size(679, 475);
+			this->Name = L"Juego";
+			this->Text = L"Juego";
+			this->Load += gcnew System::EventHandler(this, &Juego::Juego_Load);
+			this->ResumeLayout(false);
+
 		}
 #pragma endregion
+	private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
+		Graphics ^g = this->CreateGraphics();
+		BufferedGraphicsContext^ espacio = BufferedGraphicsManager::Current;
+		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
+		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpDestruible);
+		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
+		buffer->Render(g);
+	}
+	private: System::Void Juego_Load(System::Object^  sender, System::EventArgs^  e) {
+		oControladora->CambiarNivel();
+
+	}
 	};
 }
