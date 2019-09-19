@@ -14,15 +14,21 @@ namespace Project1 {
 	/// </summary>
 	public ref class Juego : public System::Windows::Forms::Form
 	{
-	public:
+	
+	private:
 		CControladora *oControladora = new CControladora();
 		Bitmap^ bmpSolido = gcnew Bitmap("Imagenes\\bmpSolido.png");
 		Bitmap^ bmpDestruible = gcnew Bitmap("Imagenes\\bmpDestruible.png");
 		Bitmap^ bmpSuelo = gcnew Bitmap("Imagenes\\bmpSuelo.png");
-		Bitmap^ bmpJugador = gcnew Bitmap("Imagenes\\Jugador.png");
+		Bitmap^ bmpJugador = gcnew Bitmap("Imagenes\\Jugador.png"); 
+		Bitmap^ bmpBomba = gcnew Bitmap("Imagenes\\bomba.png"); 
+		Bitmap^ bmpExplosion = gcnew Bitmap("Imagenes\\explosion.png");
+	public:
 		Juego(void)
 		{
-			bmpJugador->MakeTransparent(bmpJugador->GetPixel(0, 0));
+			bmpJugador->MakeTransparent(bmpJugador->GetPixel(0, 0)); 
+			bmpBomba->MakeTransparent(bmpBomba->GetPixel(0, 0)); 
+			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0));
 			InitializeComponent();
 			//
 			//TODO: agregar código de constructor aquí
@@ -70,7 +76,7 @@ namespace Project1 {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(509, 386);
+			this->ClientSize = System::Drawing::Size(857, 545);
 			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"Juego";
 			this->Text = L"Juego";
@@ -85,7 +91,7 @@ namespace Project1 {
 		Graphics ^g = this->CreateGraphics();
 		BufferedGraphicsContext^ espacio = BufferedGraphicsManager::Current;
 		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
-		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpDestruible, bmpJugador);
+		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba,bmpExplosion, bmpDestruible, bmpJugador);
 		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
 		buffer->Render(g);
 		delete buffer, espacio, g;
@@ -111,7 +117,11 @@ namespace Project1 {
 		}
 	}
 	private: System::Void UltimaTeclaPresionada(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-		switch (e->KeyCode) {
+		switch (e->KeyCode)  
+		{ 
+		case Keys::Space:
+				oControladora->agregarBomba();
+				break;
 		default:
 			oControladora->getoJugador()->setDireccion(Direcciones::Ninguna);
 			break;

@@ -16,9 +16,21 @@ public:
 		direccion = Direcciones::Ninguna;
 		ultima = Direcciones::Abajo;
 	}
-	~CJugador (){}
-	void setDireccion(Direcciones direccion){
-		this->direccion = direccion;
+	~CJugador (){} 
+	int getX() { return x + 2 * 3; }
+	int getY() { return y + 15 * 3 + dy; } 
+	void setDx(int dx) {
+		this->dx = dx;
+	} 
+	void setDY(int dy) {
+		this->dy = dy;
+	}
+	Direcciones getDireccion() {
+		return direccion;
+	}
+
+	void setDireccion(Direcciones direccionActual){
+		direccion = direccionActual;
 	}
 	void ValidarMovimiento(int** matriz) {
 		int X, Y = 0;
