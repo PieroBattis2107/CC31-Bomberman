@@ -19,8 +19,10 @@ namespace Project1 {
 		Bitmap^ bmpSolido = gcnew Bitmap("Imagenes\\bmpSolido.png");
 		Bitmap^ bmpDestruible = gcnew Bitmap("Imagenes\\bmpDestruible.png");
 		Bitmap^ bmpSuelo = gcnew Bitmap("Imagenes\\bmpSuelo.png");
+		Bitmap^ bmpJugador = gcnew Bitmap("Imagenes\\Jugador.png");
 		Juego(void)
 		{
+			bmpJugador->MakeTransparent(bmpJugador->GetPixel(0, 0));
 			InitializeComponent();
 			//
 			//TODO: agregar código de constructor aquí
@@ -66,12 +68,15 @@ namespace Project1 {
 			// 
 			// Juego
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(679, 475);
+			this->ClientSize = System::Drawing::Size(509, 386);
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"Juego";
 			this->Text = L"Juego";
 			this->Load += gcnew System::EventHandler(this, &Juego::Juego_Load);
+			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &Juego::MantenerTecla);
+			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &Juego::UltimaTeclaPresionada);
 			this->ResumeLayout(false);
 
 		}
@@ -80,13 +85,37 @@ namespace Project1 {
 		Graphics ^g = this->CreateGraphics();
 		BufferedGraphicsContext^ espacio = BufferedGraphicsManager::Current;
 		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
-		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpDestruible);
+		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpDestruible, bmpJugador);
 		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
 		buffer->Render(g);
+		delete buffer, espacio, g;
 	}
 	private: System::Void Juego_Load(System::Object^  sender, System::EventArgs^  e) {
 		oControladora->CambiarNivel();
 
+	}
+	private: System::Void MantenerTecla(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+		switch (e->KeyCode) {
+		case Keys::Up:
+			oControladora->getoJugador()->setDireccion(Direcciones::Arriba);
+			break;
+		case Keys::Down:
+			oControladora->getoJugador()->setDireccion(Direcciones::Abajo);
+			break;
+		case Keys::Left:
+			oControladora->getoJugador()->setDireccion(Direcciones::Izquierda);
+			break;
+		case Keys::Right:
+			oControladora->getoJugador()->setDireccion(Direcciones::Derecha);
+			break;
+		}
+	}
+	private: System::Void UltimaTeclaPresionada(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+		switch (e->KeyCode) {
+		default:
+			oControladora->getoJugador()->setDireccion(Direcciones::Ninguna);
+			break;
+		}
 	}
 	};
 }
