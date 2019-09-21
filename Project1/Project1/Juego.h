@@ -16,23 +16,25 @@ namespace Project1 {
 	{
 	
 	private:
-		CControladora *oControladora = new CControladora();
+		CControladora* oControladora;
 		Bitmap^ bmpSolido = gcnew Bitmap("Imagenes\\bmpSolido.png");
 		Bitmap^ bmpDestruible = gcnew Bitmap("Imagenes\\bmpDestruible.png");
 		Bitmap^ bmpSuelo = gcnew Bitmap("Imagenes\\bmpSuelo.png");
 		Bitmap^ bmpJugador = gcnew Bitmap("Imagenes\\Jugador.png"); 
 		Bitmap^ bmpBomba = gcnew Bitmap("Imagenes\\bomba.png"); 
 		Bitmap^ bmpExplosion = gcnew Bitmap("Imagenes\\explosion.png");
+		Bitmap^ bmpMejoras = gcnew Bitmap("Imagenes\\bmpMejoras.png");
 	public:
 		Juego(void)
 		{
-			bmpJugador->MakeTransparent(bmpJugador->GetPixel(0, 0)); 
-			bmpBomba->MakeTransparent(bmpBomba->GetPixel(0, 0)); 
-			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0));
 			InitializeComponent();
+			oControladora = new CControladora();
 			//
 			//TODO: agregar código de constructor aquí
 			//
+			bmpJugador->MakeTransparent(bmpJugador->GetPixel(0, 0));
+			bmpBomba->MakeTransparent(bmpBomba->GetPixel(0, 0));
+			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0));
 		}
 
 	protected:
@@ -46,6 +48,9 @@ namespace Project1 {
 				delete components;
 			}
 		}
+	private: System::Windows::Forms::Label^ lblNivel;
+	private: System::Windows::Forms::ProgressBar^ pbCarga;
+	private: System::Windows::Forms::Timer^ trCarga;
 	private: System::Windows::Forms::Timer^  timer1;
 	protected:
 	private: System::ComponentModel::IContainer^  components;
@@ -65,25 +70,57 @@ namespace Project1 {
 		{
 			this->components = (gcnew System::ComponentModel::Container());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->lblNivel = (gcnew System::Windows::Forms::Label());
+			this->pbCarga = (gcnew System::Windows::Forms::ProgressBar());
+			this->trCarga = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
 			// 
 			// timer1
 			// 
-			this->timer1->Enabled = true;
 			this->timer1->Tick += gcnew System::EventHandler(this, &Juego::timer1_Tick);
+			// 
+			// lblNivel
+			// 
+			this->lblNivel->AutoSize = true;
+			this->lblNivel->Font = (gcnew System::Drawing::Font(L"Bahnschrift Condensed", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblNivel->ForeColor = System::Drawing::Color::White;
+			this->lblNivel->Location = System::Drawing::Point(212, 237);
+			this->lblNivel->Name = L"lblNivel";
+			this->lblNivel->Size = System::Drawing::Size(49, 25);
+			this->lblNivel->TabIndex = 0;
+			this->lblNivel->Text = L"Nivel: ";
+			// 
+			// pbCarga
+			// 
+			this->pbCarga->Location = System::Drawing::Point(191, 279);
+			this->pbCarga->Name = L"pbCarga";
+			this->pbCarga->Size = System::Drawing::Size(161, 23);
+			this->pbCarga->TabIndex = 1;
+			// 
+			// trCarga
+			// 
+			this->trCarga->Enabled = true;
+			this->trCarga->Interval = 2500;
+			this->trCarga->Tick += gcnew System::EventHandler(this, &Juego::TrCarga_Tick);
 			// 
 			// Juego
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(857, 545);
+			this->BackColor = System::Drawing::Color::Black;
+			this->ClientSize = System::Drawing::Size(450, 402);
+			this->Controls->Add(this->pbCarga);
+			this->Controls->Add(this->lblNivel);
 			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"Juego";
 			this->Text = L"Juego";
+			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &Juego::Juego_Load);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &Juego::MantenerTecla);
 			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &Juego::UltimaTeclaPresionada);
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -91,12 +128,13 @@ namespace Project1 {
 		Graphics ^g = this->CreateGraphics();
 		BufferedGraphicsContext^ espacio = BufferedGraphicsManager::Current;
 		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
-		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba,bmpExplosion, bmpDestruible, bmpJugador);
+		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba,bmpExplosion, bmpDestruible, bmpJugador, bmpMejoras);
 		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
 		buffer->Render(g);
 		delete buffer, espacio, g;
 	}
 	private: System::Void Juego_Load(System::Object^  sender, System::EventArgs^  e) {
+		lblNivel->Text = "Nivel: " + oControladora->getNivel();
 		oControladora->CambiarNivel();
 
 	}
@@ -127,5 +165,21 @@ namespace Project1 {
 			break;
 		}
 	}
-	};
+	private: System::Void TrCarga_Tick(System::Object^ sender, System::EventArgs^ e) {
+		lblNivel->Text = "Nivel: " + oControladora->getNivel();
+		pbCarga->Increment(10);
+		if (trCarga->Interval == 2500 && oControladora->getArrMejoras()->getvector_mejoras().size()<oControladora->getNivel()) {
+			oControladora->crear_enemigos_y_mejoras();
+		}
+		else {
+			trCarga->Enabled = false;
+			timer1->Enabled = true;
+
+			lblNivel->Visible = false;
+			lblNivel->Enabled = false;
+			pbCarga->Visible = false;
+			pbCarga->Enabled = false;
+		}
+	}
+};
 }
