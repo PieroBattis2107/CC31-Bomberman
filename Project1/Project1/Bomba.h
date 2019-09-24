@@ -23,6 +23,9 @@ public:
 		anchoExplosion = 80 / 4;
 	}
 	~CBomba(){} 
+	Rectangle Rectangulo() {
+		return Rectangle(x, y, 40, 40);
+	}
 	//2 espacion donde puede caminar  
 	//0 donde inica el jugador
 	bool validarLugar(int xJugador,int yJugador,int **matriz) {
@@ -141,6 +144,18 @@ public:
 	} 
 	int getY() {
 		return y;
+	}
+
+	void setX(int v) {
+		x = v;
+	}
+
+	void setY(int v) {
+		y = v;
+	}
+
+	void settiempo(int p) {
+		tiempo_antes_de_explotar = p;
 	}
 
 private://datos de la explosion 

@@ -39,6 +39,14 @@ public:
 	vector<CBomba*>getarregloBombas() {
 		return arregloBombas;
 	}
+
+	void setBombas(int v) {
+		totalBombas = v;
+	}
+	int getBomba() {
+		return totalBombas;
+	}
+
 private: 
 	vector<CBomba*>arregloBombas; 
 	int totalBombas;

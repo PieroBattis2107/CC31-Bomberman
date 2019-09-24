@@ -8,7 +8,7 @@ public:
 		//Posición del Jugador
 		this->x = x; this->y = y;
 		//Movimiento del Jugador
-		dx = 0; dy = 0;
+		dx = 0; dy = 0; acelera = 0;
 		// Animación del Sprite
 		ancho = 18; alto = 26;
 		indiceX = 0; indiceY = 0; 
@@ -24,6 +24,7 @@ public:
 	int getVidas() {return vidas;}
 	int getX() { return x + 2 * 3; }
 	int getY() { return y + 15 * 3 + dy; } 
+	void setVidas(int v) { vidas = v; }
 	void setDx(int dx) {
 		this->dx = dx;
 	} 
@@ -98,7 +99,7 @@ public:
 				indiceX++;
 			else
 				indiceX = 1;
-			dx = 0; dy = -10;
+			dx = 0; dy = -10-acelera;
 			ultima = Arriba;
 			break;
 		case Direcciones::Abajo:
@@ -107,7 +108,7 @@ public:
 				indiceY++;
 			else
 				indiceY = 1;
-			dx = 0; dy = 10;
+			dx = 0; dy = 10+acelera;
 			ultima = Abajo;
 			break;
 		case Direcciones::Izquierda:
@@ -116,7 +117,7 @@ public:
 				indiceX++;
 			else
 				indiceX = 1;
-			dx = -10; dy = 0;
+			dx = -10-acelera; dy = 0;
 			ultima = Izquierda;
 			break;
 		case Direcciones::Derecha:
@@ -125,7 +126,7 @@ public:
 				indiceX++;
 			else
 				indiceX = 1;
-			dx = 10; dy = 0;
+			dx = 10+acelera; dy = 0;
 			ultima = Derecha;
 			break;
 		case Direcciones::Ninguna:
@@ -150,12 +151,22 @@ public:
 		}
 		dibujarJugador(g, bmpJugador, matriz);
 	}
+
+	int getAcelera() {
+		return acelera;
+	}
+
+	void setAcelera(int v) {
+		acelera = v;
+	}
+
 private:
 	int x, y;
 	int dx, dy;
 	int ancho, alto;
 	int indiceX, indiceY; 
 	int vidas;
+	int acelera;
 	Direcciones direccion;
 	Direcciones ultima;
 

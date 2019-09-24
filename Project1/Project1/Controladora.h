@@ -15,6 +15,8 @@ public:
 		oArrMejoras = new CArrMejoras(); 
 		oArrEnemigos = new CArrEnemigos();
 		nivel = 1;
+		habilidad = false;
+
 	}
 	~CControladora() {}
 	void CambiarNivel() {
@@ -52,7 +54,56 @@ public:
 			}
 		}
 	}
+	/*void patear() {
+		if (habilidad == true) {
+			for (int i = 0; i < oArrBombas->getarregloBombas().size(); i++)
+			{
+				if (oArrBombas->getarregloBombas().at(i)->getEstado() == Estado::normal &&oJugador->retornarRectangulo().IntersectsWith(oArrBombas->getarregloBombas().at(i)->getRectangulo()))
+				{
+					if (oJugador->getDireccion() == Direcciones::Abajo && oEscenario->getValue((oArrBombas->getarregloBombas().at(i)->getY() + 50) / 50, (oArrBombas->getarregloBombas().at(i)->getX()) / 50) == 2) {
+						oArrBombas->getarregloBombas().at(i)->setY(oArrBombas->getarregloBombas().at(i)->getY() + 50);
+						oArrBombas->getarregloBombas().at(i)->settiempo(0);
+					}
+					if (oJugador->getDireccion() == Direcciones::Arriba&& oEscenario->getValue((oArrBombas->getarregloBombas().at(i)->getY() - 50) / 50, (oArrBombas->getarregloBombas().at(i)->getX()) / 50) == 2) {
+						oArrBombas->getarregloBombas().at(i)->setY(oArrBombas->getarregloBombas().at(i)->getY() - 50);
+						oArrBombas->getarregloBombas().at(i)->settiempo(0);
+					}
+					if (oJugador->getDireccion() == Direcciones::Derecha&& oEscenario->getValue((oArrBombas->getarregloBombas().at(i)->getY()) / 50, (oArrBombas->getarregloBombas().at(i)->getX() + 50) / 50) == 2) {
+						oArrBombas->getarregloBombas().at(i)->setX(oArrBombas->getarregloBombas().at(i)->getX() + 50);
+						oArrBombas->getarregloBombas().at(i)->settiempo(0);
+					}
+					if (oJugador->getDireccion() == Direcciones::Izquierda&& oEscenario->getValue((oArrBombas->getarregloBombas().at(i)->getY()) / 50, (oArrBombas->getarregloBombas().at(i)->getX() - 50) / 50) == 2) {
+						oArrBombas->getarregloBombas().at(i)->setX(oArrBombas->getarregloBombas().at(i)->getX() - 50);
+						oArrBombas->getarregloBombas().at(i)->settiempo(0);
+					}
+				}
+			}
+		}
+	}*/
 
+	/*void aggarraMejoras() {
+		for (int i = 0; i < oArrMejoras->getvector_mejoras().size(); i++) {
+			if (oJugador->retornarRectangulo().IntersectsWith(oArrMejoras->getvector_mejoras().at(i)->devolverR))
+			{
+				switch (oArrMejoras->getvector_mejoras().at(i)->getTipoMejora)
+				{
+				case 1://agrega bomba
+					oArrBombas->setBombas(oArrBombas->getBomba() + 1); break;
+				//case 2://mover
+					//habilidad = true; break;
+				case 3://disminuye vida
+					oJugador->setVidas(oJugador->getVidas() - 1); break;
+				case 4://patines
+					oJugador->setAcelera(oJugador->getAcelera() + 3); break;
+				case 5://Mas vidas
+					oJugador->setVidas(oJugador->getVidas() + 1); break;
+				default:
+					break;
+				}
+			}
+		}
+	}*/
+	
 	void dibujar(Graphics^ g, Bitmap^bmpBase, Bitmap^bmpSolido, Bitmap^bmpBomba, Bitmap^bmpExplosion, Bitmap^bmpDestruible, 
 		Bitmap^bmpJugador, Bitmap^ bmpMejoras, Bitmap^ bmpEnemigo) {
 		oEscenario->PintarBase(g, bmpBase);
@@ -64,6 +115,9 @@ public:
 	  
 		disminuir_vidas_Por_Bomba();
 		disminuir_Vidas_Por_Enemigo();
+
+		//aggarraMejoras();
+		//patear();
 		
 	} 
 	void crear_enemigos_y_mejoras() {
@@ -87,6 +141,7 @@ public:
 	} 
 
 	
+	
 private:
 	CEscenario *oEscenario;
 	CJugador* oJugador; 
@@ -94,6 +149,7 @@ private:
 	CArrMejoras* oArrMejoras; 
 	CArrEnemigos* oArrEnemigos;
 	int nivel;
+	bool habilidad;
 };
 
 

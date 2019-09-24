@@ -18,6 +18,11 @@ public:
 		indiceX = 0; indiceY = 0;
 	}
 	~CMejora (){}
+
+	Rectangle devolverR() {
+		return Rectangle(j * 50, i * 50, ancho * 3.125, alto * 3.125);
+	}
+
 	void dibujar(Graphics^ g, Bitmap^ bmpMejoras, int** matriz) {
 		Rectangle porcionAUsar = Rectangle(indiceX * ancho, indiceY * alto, ancho, alto);
 
@@ -74,6 +79,11 @@ public:
 			break;
 		}
 	}
+
+	int getTipoMejora() {
+		return tipo_de_mejora;
+	}
+
 private:
 	int i, j;
 
