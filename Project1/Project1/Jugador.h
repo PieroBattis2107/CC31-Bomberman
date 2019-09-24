@@ -11,12 +11,17 @@ public:
 		dx = 0; dy = 0;
 		// Animación del Sprite
 		ancho = 18; alto = 26;
-		indiceX = 0; indiceY = 0;
-		
+		indiceX = 0; indiceY = 0; 
+		vidas = 5;
+		//variable de direccion
 		direccion = Direcciones::Ninguna;
 		ultima = Direcciones::Abajo;
 	}
-	~CJugador (){} 
+	~CJugador (){}  
+	Rectangle retornarRectangulo() {
+		return Rectangle(x + 2 * 3 + dx, y + 15 * 3, (ancho - 4) * 3, (alto - 15) * 3);
+	} 
+	int getVidas() {return vidas;}
 	int getX() { return x + 2 * 3; }
 	int getY() { return y + 15 * 3 + dy; } 
 	void setDx(int dx) {
@@ -46,6 +51,29 @@ public:
 			}
 			Y += 50;
 		}
+	}  
+	void disminuirvidas() {
+		x = 50; 
+		y = 50;
+		vidas--; 
+
+	}
+	void disminuirvidas(int PuntaIzquierda,int PuntaDerecha,int CentroInicioY,int CentroFinalY, 
+		int PuntaSuperior, int PuntaInferior, int CentroInicioX, int CentroFinalX){ 
+	 
+		if (getX() >= PuntaIzquierda&&getX() <= PuntaDerecha&&getY() >= CentroInicioY &&getY() <= CentroFinalX)
+		{
+			x = 50; 
+			y = 50; 
+			vidas--;
+		}  
+		if (getY() >= PuntaSuperior&&getY() <= PuntaInferior&&getX() >= CentroInicioX&&getX() <= CentroFinalX)
+		{
+			x = 50;
+			y = 50;
+			vidas--;
+		}
+
 	}
 	void dibujarJugador(Graphics^ g, Bitmap^ bmpJugador, int**matriz) {
 		CDI = Rectangle(x + 2 * 3 + dx, y + 15 * 3, (ancho - 4) * 3, (alto - 15) * 3);
@@ -126,7 +154,8 @@ private:
 	int x, y;
 	int dx, dy;
 	int ancho, alto;
-	int indiceX, indiceY;
+	int indiceX, indiceY; 
+	int vidas;
 	Direcciones direccion;
 	Direcciones ultima;
 

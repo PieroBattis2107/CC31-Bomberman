@@ -133,6 +133,7 @@ namespace Project1 {
 		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
 		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba,bmpExplosion, bmpDestruible, bmpJugador, bmpMejoras,bmpEnemigo);
 		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
+		this->Text = "" +oControladora->getoJugador()->getVidas();
 		buffer->Render(g);
 		delete buffer, espacio, g;
 	}

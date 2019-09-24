@@ -55,6 +55,9 @@ public:
 			while (indiceX != 0)
 				indiceX--;
 		}
+	} 
+	Rectangle retornarRectangulo() {
+		return Rectangle(x, y, 50, 50);
 	}
 private: 
 	int x; 

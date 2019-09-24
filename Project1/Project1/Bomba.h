@@ -134,7 +134,14 @@ public:
 
 	Estado getEstado() {
 		return estado;
+	}  
+
+	int getX() {
+		return x;
 	} 
+	int getY() {
+		return y;
+	}
 
 private://datos de la explosion 
 	int indiceEX; 
