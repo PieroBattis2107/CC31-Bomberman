@@ -23,7 +23,9 @@ namespace Project1 {
 		Bitmap^ bmpJugador = gcnew Bitmap("Imagenes\\Jugador.png"); 
 		Bitmap^ bmpBomba = gcnew Bitmap("Imagenes\\bomba.png"); 
 		Bitmap^ bmpExplosion = gcnew Bitmap("Imagenes\\explosion.png");
-		Bitmap^ bmpMejoras = gcnew Bitmap("Imagenes\\bmpMejoras.png");
+		Bitmap^ bmpMejoras = gcnew Bitmap("Imagenes\\bmpMejoras.png"); 
+		Bitmap^ bmpEnemigo = gcnew Bitmap("Imagenes\\bmpEnemigo.png");
+
 	public:
 		Juego(void)
 		{
@@ -34,7 +36,8 @@ namespace Project1 {
 			//
 			bmpJugador->MakeTransparent(bmpJugador->GetPixel(0, 0));
 			bmpBomba->MakeTransparent(bmpBomba->GetPixel(0, 0));
-			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0));
+			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0)); 
+			bmpEnemigo->MakeTransparent(bmpEnemigo->GetPixel(0, 0));
 		}
 
 	protected:
@@ -87,7 +90,7 @@ namespace Project1 {
 			this->lblNivel->ForeColor = System::Drawing::Color::White;
 			this->lblNivel->Location = System::Drawing::Point(212, 237);
 			this->lblNivel->Name = L"lblNivel";
-			this->lblNivel->Size = System::Drawing::Size(49, 25);
+			this->lblNivel->Size = System::Drawing::Size(52, 25);
 			this->lblNivel->TabIndex = 0;
 			this->lblNivel->Text = L"Nivel: ";
 			// 
@@ -109,13 +112,13 @@ namespace Project1 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Black;
-			this->ClientSize = System::Drawing::Size(450, 402);
+			this->ClientSize = System::Drawing::Size(848, 736);
 			this->Controls->Add(this->pbCarga);
 			this->Controls->Add(this->lblNivel);
 			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"Juego";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Juego";
-			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &Juego::Juego_Load);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &Juego::MantenerTecla);
 			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &Juego::UltimaTeclaPresionada);
@@ -128,7 +131,7 @@ namespace Project1 {
 		Graphics ^g = this->CreateGraphics();
 		BufferedGraphicsContext^ espacio = BufferedGraphicsManager::Current;
 		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
-		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba,bmpExplosion, bmpDestruible, bmpJugador, bmpMejoras);
+		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba,bmpExplosion, bmpDestruible, bmpJugador, bmpMejoras,bmpEnemigo);
 		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
 		buffer->Render(g);
 		delete buffer, espacio, g;
@@ -168,7 +171,7 @@ namespace Project1 {
 	private: System::Void TrCarga_Tick(System::Object^ sender, System::EventArgs^ e) {
 		lblNivel->Text = "Nivel: " + oControladora->getNivel();
 		pbCarga->Increment(10);
-		if (trCarga->Interval == 2500 && oControladora->getArrMejoras()->getvector_mejoras().size()<oControladora->getNivel()) {
+		if (trCarga->Interval == 2500 && oControladora->getoArrEnemigos()->getarregloEnemigos().size()<oControladora->getNivel()) {
 			oControladora->crear_enemigos_y_mejoras();
 		}
 		else {
