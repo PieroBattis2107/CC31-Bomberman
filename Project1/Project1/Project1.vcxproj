@@ -148,6 +148,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Jugador.h" />
+    <ClInclude Include="Lista.h" />
     <ClInclude Include="Mejora.h" />
     <ClInclude Include="MenuPrincipal.h">
       <FileType>CppForm</FileType>

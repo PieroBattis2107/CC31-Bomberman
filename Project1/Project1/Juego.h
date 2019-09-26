@@ -172,7 +172,7 @@ namespace Project1 {
 	private: System::Void TrCarga_Tick(System::Object^ sender, System::EventArgs^ e) {
 		lblNivel->Text = "Nivel: " + oControladora->getNivel();
 		pbCarga->Increment(10);
-		if (trCarga->Interval == 2500 && oControladora->getoArrEnemigos()->getarregloEnemigos().size()<oControladora->getNivel()) {
+		if (trCarga->Interval == 2500 && oControladora->getoArrEnemigos()->getarregloEnemigos()->longitud()<oControladora->getNivel()) {
 			oControladora->crear_enemigos_y_mejoras();
 		}
 		else {

@@ -2,26 +2,29 @@
 #define __ARRMEJORAS_H__
 #include "Mejora.h"
 #include <vector>
+#include "Lista.h"
 using namespace std;
 class CArrMejoras {
 public:
-	CArrMejoras (){}
-	~CArrMejoras (){}
+	CArrMejoras() {
+		lista_mejoras = new Lista<CMejora*>;
+	}
+	~CArrMejoras() {}
 	void crearMejoras() {
 		CMejora* nueva_mejora = new CMejora();
-		vector_mejoras.push_back(nueva_mejora);
+		lista_mejoras->agregarFinal(nueva_mejora);
 	}
 	void dibujar(Graphics^ g, Bitmap^ bmpMejoras, int** matriz) {
-		for (int i = 0; i < vector_mejoras.size(); i++) {
-			vector_mejoras.at(i)->dibujar(g, bmpMejoras, matriz);
-			vector_mejoras.at(i)->animar();
+		for (int i = 0; i < lista_mejoras->longitud(); i++) {
+			lista_mejoras->obtenerPos(i)->dibujar(g, bmpMejoras, matriz);
+			lista_mejoras->obtenerPos(i)->animar();
 		}
 	}
-	vector<CMejora*> getvector_mejoras(){
-		return vector_mejoras;
+	Lista<CMejora*>* getvector_mejoras() {
+		return lista_mejoras;
 	}
 private:
-	vector<CMejora*>vector_mejoras;
+	Lista<CMejora*>* lista_mejoras;
 };
 
 #endif // !__ARRMEJORAS_H__

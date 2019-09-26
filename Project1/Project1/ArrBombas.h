@@ -1,42 +1,44 @@
-
 #ifndef __ARRBOMBAS_H__ 
 #define __ARRBOMBAS_H__
 #include <vector>  
+#include"Lista.h"
 #include "Bomba.h"
 using namespace std;
 class CArrBombas
 {
-public:  
-	CArrBombas() { totalBombas = 1; }
-	~CArrBombas(){} 
-	void crear_una_bomba(int x, int y) {  
+public:
+	CArrBombas() {
+		arregloBombas = new Lista<CBomba*>;
+		totalBombas = 1;
+	}
+	~CArrBombas() {}
+	void crear_una_bomba(int x, int y) {
 
-		if (arregloBombas.size() < totalBombas) {//limite de bombas
-			CBomba* nueva_bomba = new CBomba(x, y);
-			arregloBombas.push_back(nueva_bomba);
+		if (arregloBombas->longitud() < totalBombas) {//limite de bombas
+			arregloBombas->agregarFinal(new CBomba(x, y));
 		}
-	} 
-	void dibujar_una_bomba(Graphics^g,Bitmap^bmpBomba,Bitmap^bmpExplosion,int xJugador,int yJugador,int **matriz) {
-		for (int i = 0; i < arregloBombas.size(); i++)  
+	}
+	void dibujar_una_bomba(Graphics^g, Bitmap^bmpBomba, Bitmap^bmpExplosion, int xJugador, int yJugador, int **matriz) {
+		for (int i = 0; i < arregloBombas->longitud(); i++)
 		{
-			switch (arregloBombas.at(i)->getEstado())
-			{  
-			    case Estado::normal:  
-					arregloBombas.at(i)->dibujarBomba(g, bmpBomba, xJugador, yJugador, matriz); 
-					arregloBombas.at(i)->animar(); 
-				    break; 
-				case Estado::explosion:  
-					arregloBombas.at(i)->DibujarExplosion(g, bmpExplosion, matriz);
-					arregloBombas.at(i)->animarExplosion();
-					break; 
-				case Estado::desaparecer:  
-					arregloBombas.erase(arregloBombas.begin() + i);
-					break;
+			switch (arregloBombas->obtenerPos(i)->getEstado())
+			{
+			case Estado::normal:
+				arregloBombas->obtenerPos(i)->dibujarBomba(g, bmpBomba, xJugador, yJugador, matriz);
+				arregloBombas->obtenerPos(i)->animar();
+				break;
+			case Estado::explosion:
+				arregloBombas->obtenerPos(i)->DibujarExplosion(g, bmpExplosion, matriz);
+				arregloBombas->obtenerPos(i)->animarExplosion();
+				break;
+			case Estado::desaparecer:
+				arregloBombas->eliminarPos(i);
+				break;
 			}
-		 }
+		}
 
-	} 
-	vector<CBomba*>getarregloBombas() {
+	}
+	Lista<CBomba*>* getarregloBombas() {
 		return arregloBombas;
 	}
 
@@ -47,8 +49,8 @@ public:
 		return totalBombas;
 	}
 
-private: 
-	vector<CBomba*>arregloBombas; 
+private:
+	Lista<CBomba*>* arregloBombas;
 	int totalBombas;
 };
 

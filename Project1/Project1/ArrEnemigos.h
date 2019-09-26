@@ -2,30 +2,30 @@
 #define __ARRENEMIGOS_H__ 
 #include "Enemigo.h" 
 #include <vector>
+#include "Lista.h"
 using namespace std;
 class CArrEnemigos
 {
-public: 
-	CArrEnemigos(){ 
-		arregloEnemigos = vector<CEnemigo*>();
+public:
+	CArrEnemigos() {
+		arregloEnemigos = new Lista<CEnemigo*>;
 	}
-	~CArrEnemigos(){} 
+	~CArrEnemigos() {}
 	void crearEnemigos() {
-		CEnemigo* nuevo = new CEnemigo(); 
-		arregloEnemigos.push_back(nuevo);
+		arregloEnemigos->agregarFinal(new CEnemigo());
 	}
 	void dibujar(Graphics^g, Bitmap^bmpEnemigo, int**matriz) {
-		for (int i = 0; i < arregloEnemigos.size(); i++)
+		for (int i = 0; i < arregloEnemigos->longitud(); i++)
 		{
-			arregloEnemigos.at(i)->dibujar(g, bmpEnemigo, matriz); 
-			arregloEnemigos.at(i)->animar();
+			arregloEnemigos->obtenerPos(i)->dibujar(g, bmpEnemigo, matriz);
+			arregloEnemigos->obtenerPos(i)->animar();
 		}
 	}
-	vector<CEnemigo*>getarregloEnemigos() {
+	Lista<CEnemigo*>* getarregloEnemigos() {
 		return arregloEnemigos;
 	}
-private: 
-	vector<CEnemigo*>arregloEnemigos;
+private:
+	Lista<CEnemigo*>* arregloEnemigos;
 };
 
 #endif // !__ARRENEMIGOS_H__
