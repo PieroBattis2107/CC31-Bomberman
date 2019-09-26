@@ -5,6 +5,11 @@
 #include "ArrBombas.h"
 #include "ArrMejoras.h" 
 #include "ArrEnemigos.h"
+#include <fstream>
+#include <sstream>
+using namespace System;
+using namespace std;
+
 class CControladora
 {
 public:
@@ -18,6 +23,19 @@ public:
 		habilidad = false;
 	}
 	~CControladora() {}
+	void guardar() {
+		int z;
+		string datos = std::to_string(oJugador->getX()) + "," + std::to_string(oJugador->getY()) + "," + std::to_string(oJugador->getBomba()->lon());
+		string juegoGuardado;
+		juegoGuardado += "DatosGuardados.txt";
+		ofstream fs(juegoGuardado.c_str());
+		{
+			fs << datos.c_str() << endl;
+			fs.close();
+			cout << "El archivo ha sido creado correctamente" << endl;
+		}
+
+	}
 	void CambiarNivel() {
 		oEscenario->generarMatriz();
 	}
@@ -107,16 +125,15 @@ public:
 	void dibujar(Graphics^ g, Bitmap^bmpBase, Bitmap^bmpSolido, Bitmap^bmpBomba, Bitmap^bmpExplosion, Bitmap^bmpDestruible,
 		Bitmap^bmpJugador, Bitmap^ bmpMejoras, Bitmap^ bmpEnemigo) {
 		oEscenario->PintarBase(g, bmpBase);
-		oArrMejoras->dibujar(g, bmpMejoras, oEscenario->getmatriz());
 		oEscenario->PintarMatriz(g, bmpSolido, bmpDestruible);
 		oJugador->moverJugador(g, bmpJugador, oEscenario->getmatriz());
-
 		oJugador->drawBomba(g, bmpBomba, bmpExplosion, oJugador->getX(), oJugador->getY(), oEscenario->getmatriz());
 		prendela();
+		oJugador->recogerBombas(*oArrMejoras);
+		oArrMejoras->dibujar(g, bmpMejoras, oEscenario->getmatriz());
 
 		//oArrBombas->dibujar_una_bomba(g, bmpBomba, bmpExplosion, oJugador->getX(), oJugador->getY(), oEscenario->getmatriz());
 		oArrEnemigos->dibujar(g, bmpEnemigo, oEscenario->getmatriz());
-
 		//disminuir_vidas_Por_Bomba();
 		//disminuir_Vidas_Por_Enemigo();
 

@@ -4,6 +4,7 @@ using namespace System::Drawing;
 enum Direcciones { Arriba, Abajo, Izquierda, Derecha, Ninguna };
 #include"Pila.h"
 #include"Bomba.h"
+#include"ArrMejoras.h"
 class CJugador {
 public:
 	CJugador(int x, int y) {
@@ -30,6 +31,16 @@ public:
 	}
 	void addBomba() {
 		bombas->push(new CBomba(x, y));
+	}
+	void recogerBombas(CArrMejoras &mejoras) {
+		for (int i = 0; i < mejoras.getvector_mejoras()->longitud(); i++)
+		{
+			if (this->CAA.IntersectsWith(mejoras.getvector_mejoras()->obtenerPos(i)->getArea()))
+			{
+				addBomba();
+				mejoras.getvector_mejoras()->eliminarPos(i);
+			}
+		}
 	}
 	void drawBomba(Graphics^ g, Bitmap^ bmpBomba, Bitmap^ bmpExplosion, int xJugador, int yJugador, int** matriz) {
 		if (!bombas->isEmpty())
