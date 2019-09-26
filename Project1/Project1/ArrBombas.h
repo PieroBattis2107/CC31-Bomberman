@@ -1,7 +1,8 @@
+
 #ifndef __ARRBOMBAS_H__ 
 #define __ARRBOMBAS_H__
 #include <vector>  
-#include"Lista.h"
+#include "Lista.h"
 #include "Bomba.h"
 using namespace std;
 class CArrBombas
@@ -13,7 +14,6 @@ public:
 	}
 	~CArrBombas() {}
 	void crear_una_bomba(int x, int y) {
-
 		if (arregloBombas->longitud() < totalBombas) {//limite de bombas
 			arregloBombas->agregarFinal(new CBomba(x, y));
 		}
@@ -36,7 +36,6 @@ public:
 				break;
 			}
 		}
-
 	}
 	Lista<CBomba*>* getarregloBombas() {
 		return arregloBombas;

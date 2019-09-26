@@ -11,19 +11,19 @@ public:
 	CControladora() {
 		oEscenario = new CEscenario();
 		oJugador = new CJugador(50, 50);
-		oArrBombas = new CArrBombas();
+		//oArrBombas = new CArrBombas();
 		oArrMejoras = new CArrMejoras();
 		oArrEnemigos = new CArrEnemigos();
 		nivel = 1;
 		habilidad = false;
-
 	}
 	~CControladora() {}
 	void CambiarNivel() {
 		oEscenario->generarMatriz();
 	}
-	void agregarBomba() {
-		oArrBombas->crear_una_bomba(oJugador->getX(), oJugador->getY());
+	void prendela() {
+		//oArrBombas->crear_una_bomba(oJugador->getX(), oJugador->getY());
+		//oJugador->getBomba()->pop();
 	}
 
 	void disminuir_Vidas_Por_Enemigo() {
@@ -110,11 +110,15 @@ public:
 		oArrMejoras->dibujar(g, bmpMejoras, oEscenario->getmatriz());
 		oEscenario->PintarMatriz(g, bmpSolido, bmpDestruible);
 		oJugador->moverJugador(g, bmpJugador, oEscenario->getmatriz());
-		oArrBombas->dibujar_una_bomba(g, bmpBomba, bmpExplosion, oJugador->getX(), oJugador->getY(), oEscenario->getmatriz());
+
+		oJugador->drawBomba(g, bmpBomba, bmpExplosion, oJugador->getX(), oJugador->getY(), oEscenario->getmatriz());
+		prendela();
+
+		//oArrBombas->dibujar_una_bomba(g, bmpBomba, bmpExplosion, oJugador->getX(), oJugador->getY(), oEscenario->getmatriz());
 		oArrEnemigos->dibujar(g, bmpEnemigo, oEscenario->getmatriz());
 
-		disminuir_vidas_Por_Bomba();
-		disminuir_Vidas_Por_Enemigo();
+		//disminuir_vidas_Por_Bomba();
+		//disminuir_Vidas_Por_Enemigo();
 
 		//aggarraMejoras();
 		//patear();

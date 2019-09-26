@@ -14,16 +14,16 @@ namespace Project1 {
 	/// </summary>
 	public ref class Juego : public System::Windows::Forms::Form
 	{
-	
+
 	private:
 		CControladora* oControladora;
 		Bitmap^ bmpSolido = gcnew Bitmap("Imagenes\\bmpSolido.png");
 		Bitmap^ bmpDestruible = gcnew Bitmap("Imagenes\\bmpDestruible.png");
 		Bitmap^ bmpSuelo = gcnew Bitmap("Imagenes\\bmpSuelo.png");
-		Bitmap^ bmpJugador = gcnew Bitmap("Imagenes\\Jugador.png"); 
-		Bitmap^ bmpBomba = gcnew Bitmap("Imagenes\\bomba.png"); 
+		Bitmap^ bmpJugador = gcnew Bitmap("Imagenes\\Jugador.png");
+		Bitmap^ bmpBomba = gcnew Bitmap("Imagenes\\bomba.png");
 		Bitmap^ bmpExplosion = gcnew Bitmap("Imagenes\\explosion.png");
-		Bitmap^ bmpMejoras = gcnew Bitmap("Imagenes\\bmpMejoras.png"); 
+		Bitmap^ bmpMejoras = gcnew Bitmap("Imagenes\\bmpMejoras.png");
 		Bitmap^ bmpEnemigo = gcnew Bitmap("Imagenes\\bmpEnemigo.png");
 
 	public:
@@ -36,7 +36,7 @@ namespace Project1 {
 			//
 			bmpJugador->MakeTransparent(bmpJugador->GetPixel(0, 0));
 			bmpBomba->MakeTransparent(bmpBomba->GetPixel(0, 0));
-			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0)); 
+			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0));
 			bmpEnemigo->MakeTransparent(bmpEnemigo->GetPixel(0, 0));
 		}
 
@@ -131,9 +131,9 @@ namespace Project1 {
 		Graphics ^g = this->CreateGraphics();
 		BufferedGraphicsContext^ espacio = BufferedGraphicsManager::Current;
 		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
-		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba,bmpExplosion, bmpDestruible, bmpJugador, bmpMejoras,bmpEnemigo);
+		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba, bmpExplosion, bmpDestruible, bmpJugador, bmpMejoras, bmpEnemigo);
 		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
-		this->Text = "" +oControladora->getoJugador()->getVidas();
+		this->Text = "" + oControladora->getoJugador()->getVidas();
 		buffer->Render(g);
 		delete buffer, espacio, g;
 	}
@@ -159,11 +159,14 @@ namespace Project1 {
 		}
 	}
 	private: System::Void UltimaTeclaPresionada(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-		switch (e->KeyCode)  
-		{ 
+		switch (e->KeyCode)
+		{
 		case Keys::Space:
-				oControladora->agregarBomba();
-				break;
+			if (!oControladora->getoJugador()->getBomba()->isEmpty())
+				oControladora->getoJugador()->prenderBomba();
+			break;
+		case Keys::Q:
+			oControladora->getoJugador()->addBomba();
 		default:
 			oControladora->getoJugador()->setDireccion(Direcciones::Ninguna);
 			break;
@@ -185,5 +188,5 @@ namespace Project1 {
 			pbCarga->Enabled = false;
 		}
 	}
-};
+	};
 }

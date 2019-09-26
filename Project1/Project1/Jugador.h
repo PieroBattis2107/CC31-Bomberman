@@ -1,33 +1,68 @@
 #ifndef _JUGADOR_H_
 #define _JUGADOR_H_
 using namespace System::Drawing;
-enum Direcciones{Arriba, Abajo, Izquierda, Derecha, Ninguna};
+enum Direcciones { Arriba, Abajo, Izquierda, Derecha, Ninguna };
+#include"Pila.h"
+#include"Bomba.h"
 class CJugador {
 public:
-	CJugador (int x, int y){
+	CJugador(int x, int y) {
 		//Posición del Jugador
 		this->x = x; this->y = y;
 		//Movimiento del Jugador
 		dx = 0; dy = 0; acelera = 0;
 		// Animación del Sprite
 		ancho = 18; alto = 26;
-		indiceX = 0; indiceY = 0; 
+		indiceX = 0; indiceY = 0;
 		vidas = 5;
 		//variable de direccion
 		direccion = Direcciones::Ninguna;
 		ultima = Direcciones::Abajo;
+		//pila de bombas
+		bombas = new Pila<CBomba*>;
+		bombas->push(new CBomba(x, y));
 	}
-	~CJugador (){}  
+	Pila<CBomba*>* getBomba() {
+		return bombas;
+	}
+	void prenderBomba() {
+		bombas->top()->setEstado(Estado::normal);
+	}
+	void addBomba() {
+		bombas->push(new CBomba(x, y));
+	}
+	void drawBomba(Graphics^ g, Bitmap^ bmpBomba, Bitmap^ bmpExplosion, int xJugador, int yJugador, int** matriz) {
+		if (!bombas->isEmpty())
+			switch (bombas->top()->getEstado())
+			{
+			case Estado::normal:
+				bombas->top()->dibujarBomba(g, bmpBomba, xJugador, yJugador, matriz);
+				bombas->top()->animar();
+				break;
+			case Estado::explosion:
+				bombas->top()->DibujarExplosion(g, bmpExplosion, matriz);
+				bombas->top()->animarExplosion();
+				break;
+			case Estado::desaparecer:
+				bombas->pop();
+				break;
+			case Estado::apagado:
+				bombas->top()->setX(x + 12);
+				bombas->top()->setY(y + 26);
+				break;
+			}
+	}
+	~CJugador() {}
 	Rectangle retornarRectangulo() {
 		return Rectangle(x + 2 * 3 + dx, y + 15 * 3, (ancho - 4) * 3, (alto - 15) * 3);
-	} 
-	int getVidas() {return vidas;}
+	}
+	int getVidas() { return vidas; }
 	int getX() { return x + 2 * 3; }
-	int getY() { return y + 15 * 3 + dy; } 
+	int getY() { return y + 15 * 3 + dy; }
 	void setVidas(int v) { vidas = v; }
 	void setDx(int dx) {
 		this->dx = dx;
-	} 
+	}
 	void setDY(int dy) {
 		this->dy = dy;
 	}
@@ -35,7 +70,7 @@ public:
 		return direccion;
 	}
 
-	void setDireccion(Direcciones direccionActual){
+	void setDireccion(Direcciones direccionActual) {
 		direccion = direccionActual;
 	}
 	void ValidarMovimiento(int** matriz) {
@@ -52,22 +87,22 @@ public:
 			}
 			Y += 50;
 		}
-	}  
+	}
 	void disminuirvidas() {
-		x = 50; 
+		x = 50;
 		y = 50;
-		vidas--; 
+		vidas--;
 
 	}
-	void disminuirvidas(int PuntaIzquierda,int PuntaDerecha,int CentroInicioY,int CentroFinalY, 
-		int PuntaSuperior, int PuntaInferior, int CentroInicioX, int CentroFinalX){ 
-	 
+	void disminuirvidas(int PuntaIzquierda, int PuntaDerecha, int CentroInicioY, int CentroFinalY,
+		int PuntaSuperior, int PuntaInferior, int CentroInicioX, int CentroFinalX) {
+
 		if (getX() >= PuntaIzquierda&&getX() <= PuntaDerecha&&getY() >= CentroInicioY &&getY() <= CentroFinalX)
 		{
-			x = 50; 
-			y = 50; 
+			x = 50;
+			y = 50;
 			vidas--;
-		}  
+		}
 		if (getY() >= PuntaSuperior&&getY() <= PuntaInferior&&getX() >= CentroInicioX&&getX() <= CentroFinalX)
 		{
 			x = 50;
@@ -86,10 +121,10 @@ public:
 		ValidarMovimiento(matriz);
 
 		Rectangle PorcionAUsar = Rectangle(indiceX * ancho, indiceY * alto, ancho, alto);
-		Rectangle Aumento = Rectangle(x, y, ancho*3, alto*3);
+		Rectangle Aumento = Rectangle(x, y, ancho * 3, alto * 3);
 		g->DrawImage(bmpJugador, Aumento, PorcionAUsar, GraphicsUnit::Pixel);
 		x += dx; y += dy;
-	}	
+	}
 	void moverJugador(Graphics^ g, Bitmap^ bmpJugador, int** matriz) {
 		direccion == Arriba ? ancho = 17 : ancho = 18;
 		switch (direccion) {
@@ -99,7 +134,7 @@ public:
 				indiceX++;
 			else
 				indiceX = 1;
-			dx = 0; dy = -10-acelera;
+			dx = 0; dy = -10 - acelera;
 			ultima = Arriba;
 			break;
 		case Direcciones::Abajo:
@@ -108,7 +143,7 @@ public:
 				indiceY++;
 			else
 				indiceY = 1;
-			dx = 0; dy = 10+acelera;
+			dx = 0; dy = 10 + acelera;
 			ultima = Abajo;
 			break;
 		case Direcciones::Izquierda:
@@ -117,7 +152,7 @@ public:
 				indiceX++;
 			else
 				indiceX = 1;
-			dx = -10-acelera; dy = 0;
+			dx = -10 - acelera; dy = 0;
 			ultima = Izquierda;
 			break;
 		case Direcciones::Derecha:
@@ -126,7 +161,7 @@ public:
 				indiceX++;
 			else
 				indiceX = 1;
-			dx = 10+acelera; dy = 0;
+			dx = 10 + acelera; dy = 0;
 			ultima = Derecha;
 			break;
 		case Direcciones::Ninguna:
@@ -159,12 +194,11 @@ public:
 	void setAcelera(int v) {
 		acelera = v;
 	}
-
 private:
 	int x, y;
 	int dx, dy;
 	int ancho, alto;
-	int indiceX, indiceY; 
+	int indiceX, indiceY;
 	int vidas;
 	int acelera;
 	Direcciones direccion;
@@ -172,6 +206,10 @@ private:
 
 	Rectangle CDI;
 	Rectangle CAA;
+
+	Pila<CBomba*>* bombas;
+
+
 };
 
 #endif //!_JUGADOR_H_ 

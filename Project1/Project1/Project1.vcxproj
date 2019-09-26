@@ -153,6 +153,7 @@
     <ClInclude Include="MenuPrincipal.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Pila.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Juego.resx">
