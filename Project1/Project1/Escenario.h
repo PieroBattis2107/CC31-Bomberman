@@ -53,14 +53,14 @@ public:
 		}
 	}
 
-	void PintarMatriz(Graphics^g, Bitmap^bmpSolido,Bitmap^bmpDestruible) {
+	void PintarMatriz(Graphics^g, Bitmap^bmpSolido, Bitmap^bmpDestruible) {
 		int X, Y = 0;
 		for (int i = 0; i < filas; i++)
 		{
 			X = 0;
 			for (int j = 0; j < columnas; j++) {
 
-				if ( matriz[i][j] == 1 )
+				if (matriz[i][j] == 1)
 					g->DrawImage(bmpSolido, X, Y, 50, 50);
 				else {
 					if (matriz[i][j] == 3)

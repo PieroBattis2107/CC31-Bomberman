@@ -8,6 +8,10 @@ class CArrMejoras {
 public:
 	CArrMejoras() {
 		lista_mejoras = new Lista<CMejora*>;
+		for (int i = 0; i < 1; i++)
+		{
+			crearMejoras();
+		}
 	}
 	~CArrMejoras() {}
 	void crearMejoras() {
@@ -16,8 +20,12 @@ public:
 	}
 	void dibujar(Graphics^ g, Bitmap^ bmpMejoras, int** matriz) {
 		for (int i = 0; i < lista_mejoras->longitud(); i++) {
-			lista_mejoras->obtenerPos(i)->dibujar(g, bmpMejoras, matriz);
-			lista_mejoras->obtenerPos(i)->animar();
+			if (lista_mejoras->obtenerPos(i) != NULL)
+			{
+				lista_mejoras->obtenerPos(i)->dibujar(g, bmpMejoras, matriz);
+				lista_mejoras->obtenerPos(i)->animar();
+			}
+
 		}
 	}
 	Lista<CMejora*>* getvector_mejoras() {
