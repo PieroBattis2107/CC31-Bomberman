@@ -47,7 +47,7 @@ public:
 	int getBomba() {
 		return totalBombas;
 	}
-
+	int guardar;
 private:
 	Lista<CBomba*>* arregloBombas;
 	int totalBombas;
