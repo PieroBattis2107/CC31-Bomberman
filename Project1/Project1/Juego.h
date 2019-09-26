@@ -25,8 +25,6 @@ namespace Project1 {
 		Bitmap^ bmpExplosion = gcnew Bitmap("Imagenes\\explosion.png");
 		Bitmap^ bmpMejoras = gcnew Bitmap("Imagenes\\bmpMejoras.png");
 		Bitmap^ bmpEnemigo = gcnew Bitmap("Imagenes\\bmpEnemigo.png");
-		SolidBrush^ brocha;
-		System::Drawing::Font^ font;
 
 	public:
 		Juego(void)
@@ -40,8 +38,6 @@ namespace Project1 {
 			bmpBomba->MakeTransparent(bmpBomba->GetPixel(0, 0));
 			bmpExplosion->MakeTransparent(bmpExplosion->GetPixel(0, 0));
 			bmpEnemigo->MakeTransparent(bmpEnemigo->GetPixel(0, 0));
-			brocha = gcnew SolidBrush(Color::White);
-			font = gcnew System::Drawing::Font("Arial", 30);
 		}
 
 	protected:
@@ -136,7 +132,6 @@ namespace Project1 {
 		BufferedGraphicsContext^ espacio = BufferedGraphicsManager::Current;
 		BufferedGraphics^ buffer = espacio->Allocate(g, this->ClientRectangle);
 		oControladora->dibujar(buffer->Graphics, bmpSuelo, bmpSolido, bmpBomba, bmpExplosion, bmpDestruible, bmpJugador, bmpMejoras, bmpEnemigo);
-		buffer->Graphics->DrawString("BOMBAS: " + Convert::ToString(oControladora->getoJugador()->getBomba()->lon()), font, brocha, 585, 20);
 		//oControladora->CambiarNivel(); activen si quieren q cambie progresivamente
 		this->Text = "" + oControladora->getoJugador()->getVidas();
 		buffer->Render(g);
@@ -172,8 +167,6 @@ namespace Project1 {
 			break;
 		case Keys::Q:
 			oControladora->getoJugador()->addBomba();
-		case Keys::Escape:
-			oControladora->guardar();
 		default:
 			oControladora->getoJugador()->setDireccion(Direcciones::Ninguna);
 			break;

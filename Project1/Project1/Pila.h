@@ -41,8 +41,5 @@ public:
 		}
 		return 0;
 	}
-	int lon() {
-		return len;
-	}
 };
 
